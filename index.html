@@ -113,6 +113,7 @@ textarea{min-height:130px}.en{direction:ltr;unicode-bidi:isolate;display:inline-
 .ban .chip{background:#fff;color:#1E40AF;border:0;font-weight:600}
 .ric{background:#9D174D;color:#fff}.rb{color:#9D174D;border-color:#9D174D}
 @media(max-width:699px){.cal{display:none}.bx{padding-top:0}.dots.out{display:none}.dots.in{display:flex;margin:10px 0 0}.wc{flex-wrap:nowrap;overflow-x:auto;gap:6px;margin-top:12px}.wc .chip,.wc .mu{white-space:nowrap;flex:none}}
+@media(max-width:699px){.art.wk .doc{display:none}.art.wk .cswrap{display:block;position:absolute;left:0;top:0;width:190px;height:150px}.wc .chip{min-height:40px;display:inline-flex;align-items:center}}
 </style></head><body>
 <div id="app"></div>
 <script>
@@ -257,7 +258,7 @@ function render(){ST.length=0;EX.length=0;const A=$('#app'),v=S.v;let h='';
  if(v=='home'){const d=daily(),du=due().length,gl=words(l=>l.kind=='general').length,cn=k=>Object.values(S.L).filter(l=>l.kind==k).length,t=S.tab||'d',lq=latestQuiz(),qw=lq?S.L[lq].words:[];
   const bw=t=='w'?qw:d,bn=bw.length,bo=bn?((S.bi||0)%bn+bn)%bn:0,tw=bn?bw[bo]:null,ki=tw?ST.push(tw.w)-1:-1,nq=Object.values(S.L).filter(l=>l.kind=='quiz').length;
   const stk=(ws,df)=>{const g=k=>ws.length>k?ws[(bo+k)%ws.length]:df[k],a=g(0),b=g(1),c=g(2);return `<div class="cs"><div class="kc k3 en">${esc(c.w)}</div><div class="kc k2 en">${esc(b.w)}</div><div class="kc k1"><b class="en">${esc(a.w)}</b><i>${esc(a.t||'')}</i><span class="spk" onclick="event.stopPropagation();say(${js(a.w)})">🔊</span></div></div>`};
-  const wc=`<div class="wc">${bn?`<button class="chip" onclick="S.bi=${bo+1};render()">הבאה</button><button class="chip" onclick="S.bi=${bo-1};render()">הקודמת</button><button class="chip" onclick="setSt(${ki},'k')">${stOf(tw.w)=='k'?'✓ ידועה':'✓ יודע'}</button><span class="mu">${bo+1}/${bn}</span>`:''}</div>${t=='w'&&nq>1?`<div class="wc"><button class="chip" onclick="S.qp=1;render()">החלפת בוחן (${esc(S.L[lq].name)})</button></div>`:''}`;
+  const wc=`<div class="wc">${bn?`<button class="chip" onclick="S.bi=${bo+1};render()">הבאה</button><button class="chip" onclick="S.bi=${bo-1};render()">הקודמת</button><button class="chip" onclick="setSt(${ki},'k')">${stOf(tw.w)=='k'?'✓ ידועה':'✓ יודע'}</button><button class="chip" aria-label="השמעה" onclick="say(${js(tw.w)})">🔊</button><span class="mu">${bo+1}/${bn}</span>`:''}</div>${t=='w'&&nq>1?`<div class="wc"><button class="chip" onclick="S.qp=1;render()">החלפת בוחן (${esc(S.L[lq].name)})</button></div>`:''}`;
   const DF=[{w:'Discover',t:'לגלות'},{w:'Learn'},{w:'Grow'}];
   const DOC='<div class="doc"><div class="dc"><u class="ck">✓</u><s></s></div><div class="dc"><u></u><s></s></div><div class="dc"><u></u><s></s></div></div>';
   const art=`<div class="art ${t=='w'?'wk':''}"><div class="artin"><div class="sp3"><i></i><i></i><i></i></div>${t=='w'?DOC+`<div class="cswrap">${stk(qw,DF)}</div>`:stk(d,DF)}</div></div>`;
