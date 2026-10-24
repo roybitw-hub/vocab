@@ -117,8 +117,8 @@ async function init(){
  try{if(window.claude){const u=await claude.use('user');const uid=u&&await u.id();const db=await claude.use('db');if(db&&uid)col=db.collection('data/users/'+uid);smp=await claude.use('sample')}}catch(e){}
  try{if(col){const s=await col.get();s.docs.forEach(d=>{const cl=x=>JSON.parse(JSON.stringify(x||{}));if(d.id.startsWith('list_'))S.L[d.id.slice(5)]=cl(d.data());if(d.id=='prog')S.P=cl(d.data())})}
  else{const o=JSON.parse(localStorage.getItem('lex')||'{}');S.L=o.L||{};S.P=o.P||S.P}}catch(e){}
- S.P.p=S.P.p||{};S.P.st=S.P.st||{};S.P.days=S.P.days||{};render()}
-function ls(){try{localStorage.setItem('lex',JSON.stringify({L:S.L,P:S.P}))}catch(e){toast('השמירה במכשיר נכשלה – מומלץ לייצא גיבוי')}}
+ READY=1;S.P.p=S.P.p||{};S.P.st=S.P.st||{};S.P.days=S.P.days||{};render()}
+let READY=0;function ls(){if(!READY)return;try{localStorage.setItem('lex',JSON.stringify({L:S.L,P:S.P}))}catch(e){toast('השמירה במכשיר נכשלה – מומלץ לייצא גיבוי')}}
 async function save(id){try{col?await col.doc('list_'+id).set(S.L[id]):ls()}catch(e){toast('שמירה נכשלה: '+(e.message||e))}}
 async function saveP(){try{col?await col.doc('prog').set(S.P):ls()}catch(e){toast('שמירת ההתקדמות נכשלה: '+(e.message||e.code||e))}}
 function go(v,a){if(PL.on){PL.on=false;try{speechSynthesis.cancel()}catch(e){}}S.v=v;S.a=a;S.open=null;S.del=0;S.det=0;S.menu=0;S.acct=0;S.qp=0;S.vf=null;S.f='all';render();scrollTo(0,0)}
@@ -266,5 +266,5 @@ function render(){ST.length=0;EX.length=0;const A=$('#app'),v=S.v;let h='';
  if(v=='text'){const l=S.L[S.a];h=hd(esc(l.name))+`<div class="wrap"><div class="card rd">${l.text.split(/(\s+)/).map(t=>/\w/.test(t)?`<span class="w" onclick="lookup(${js(t.replace(/[^\w'-]/g,''))})">${esc(t)}</span>`:esc(t)).join('').replace(/\n/g,'<br>')}</div><div id="lk"><div class="mu">לחץ על מילה לתרגום</div></div><div class="row" style="flex-wrap:wrap;margin:10px 0">${smp?`<button class="btn g" onclick="trText()">🌐 תרגם טקסט</button><button class="btn g" onclick="xtr()">✨ חלץ מילים</button>`:''}<button class="btn g" onclick="go('list','${S.a}')">מילים (${l.words.length})</button>${S.del?`<span class="mu">למחוק את הרשימה כולה?</span><button class="btn r" onclick="delList('${S.a}')">כן, מחק</button><button class="btn g" onclick="S.del=0;render()">ביטול</button>`:`<button class="btn r" onclick="S.del=1;render()">🗑 מחק רשימה</button>`}</div>${S.busy?`<div class="card">${S.busy}</div>`:''}<div id="tr">${l.tr?`<div class="card" style="white-space:pre-wrap">${esc(l.tr)}</div>`:''}</div></div>`}
  A.innerHTML=ics(h+overlays());if(PL.on&&(S.v=='list'||lm())){const e=document.getElementById('r'+PL.i);e&&e.scrollIntoView({block:'center',behavior:'smooth'})}}
 async function enrichDaily(){const ws=daily();const by={};ws.forEach(w=>{(by[w.lid]=by[w.lid]||[]).push(w.w)});for(const id in by)await enrich(id,by[id])}
-render();init();
+init();
 </script></body></html>
